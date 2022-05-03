@@ -19,7 +19,13 @@ module.exports = ({ boxRepository, locationRepository, activityRepository, histo
 
             const newBox = await boxRepository.create({ description, origin, destination, activity, history: [locationHistory] });
 
-            return ({ _id, description, origin, destination, activity }) => ({ _id, description, origin, destination, activity })(newBox);
+            return { 
+                _id: newBox._id,
+                description: newBox.description,
+                origin: newBox.origin,
+                destination: newBox.destination,
+                activity: newBox.activity 
+            }
         },
         createNewOrders: async (orderData) => {
             if (orderData.length < 1) {

@@ -5,6 +5,8 @@ const { graphqlHTTP } = require("express-graphql");
 const locationRoutes = require("./rest/routes/location.route");
 const activityRoutes = require("./rest/routes/activity.route");
 const boxRoutes = require("./rest/routes/box.route");
+const userRoutes = require("./rest/routes/user.route");
+
 const errorMiddleware = require('./middleware/error.middleware');
 
 
@@ -27,6 +29,7 @@ module.exports = (app) => {
     .use(`${API_PREFIX}/location`, locationRoutes)
     .use(`${API_PREFIX}/activity`, activityRoutes)
     .use(`${API_PREFIX}/box`, boxRoutes)
+    .use(`${API_PREFIX}/user`, userRoutes)
     .use(errorMiddleware);
   }
 

@@ -2,16 +2,17 @@ const express = require("express");
 const router = express.Router();
 
 const LocationController = require('../controller/location.controller');
+const { isAuth, isAuthThrow } = require('../../middleware/isAuth.middleware');
 
 router
   .route("/")
   .get(LocationController.list)
-  .post(LocationController.create);
+  .post(isAuth, isAuthThrow, LocationController.create);
 
 router
   .route("/:locationId")
   .get(LocationController.getById)
-  .delete(LocationController.deleteById)
-  .put(LocationController.updateById)
+  .delete(isAuth, isAuthThrow, LocationController.deleteById)
+  .put(isAuth, isAuthThrow, LocationController.updateById)
 
 module.exports = router;

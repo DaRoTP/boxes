@@ -43,8 +43,9 @@ module.exports = {
                 const neBoxOrders = await boxServiceMongo.createNewOrders(data);
                 return res.json(neBoxOrders)
             } else {
-                const neBoxOrder = await boxServiceMongo.createNewOrder(data);
-                return res.json(neBoxOrder)
+                const newBoxOrder = await boxServiceMongo.createNewOrder(data);
+                console.log(newBoxOrder);
+                return res.json(newBoxOrder)
             }
         } catch (error) {
             next(error);
