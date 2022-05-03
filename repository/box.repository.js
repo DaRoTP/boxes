@@ -5,12 +5,26 @@ const save = async (box) => {
 }
 
 const list = async () => {
-    return await Box.find({});
+    const fields = ["_id", "description", "origin", "destination", "activity"];
+    return await Box.findOne({}, fields.join(" ")).populate("origin destination activity");
 }
 
 const getById = async (id) => {
+    const fields = ["_id", "description", "origin", "destination", "activity"];
     try {
-        return await Box.findById(id);
+        return await Box.findOne({ _id: id }, fields.join(" ")).populate("origin destination activity");
+    } catch (error) {
+        throw new Error(`could not find box with id: ${id}`)        
+    }
+}
+const getBoxHistoryById = async (id) => {
+    try {
+        return await Box.findOne({ _id: id }, "history").populate({ 
+            path: "history",
+            populate: {
+                path: "currentLocation"
+            }
+        });
     } catch (error) {
         throw new Error(`could not find box with id: ${id}`)        
     }
@@ -47,4 +61,5 @@ module.exports = {
     deleteById,
     updateById,
     createMany,
+    getBoxHistoryById,
 };

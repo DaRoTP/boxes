@@ -8,11 +8,19 @@ router
   .get(BoxController.list)
   .post(BoxController.createOrder)
 
-
 router
   .route("/:boxId")
   .get(BoxController.getOrder)
   .put(BoxController.updateOrder)
+  .delete(BoxController.deleteOrder)
+
+router
+  .route("/:boxId/transfer")
+  .patch(BoxController.transferOrder)
+
+router
+  .route("/:boxId/history")
+  .get(BoxController.getBoxHistory)
 
 
 module.exports = router;

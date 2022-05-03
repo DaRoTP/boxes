@@ -1,9 +1,12 @@
 const ENV = require('./conf/env.conf');
 
+const { graphqlHTTP } = require("express-graphql");
+
 const locationRoutes = require("./rest/routes/location.route");
 const activityRoutes = require("./rest/routes/activity.route");
 const boxRoutes = require("./rest/routes/box.route");
 const errorMiddleware = require('./middleware/error.middleware');
+
 
 const rootSchema = require("./graphql");
 

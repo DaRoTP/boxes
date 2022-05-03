@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const makeModel = require("../utils/modelFactory");
 const { ACTIVITY_NAME } = require("./activity.model");
 const { LOCATION_NAME } = require("./location.model");
+const { HISTORY_NAME } = require("./history.model");
 
 const BOX_NAME = "Box";
 
@@ -12,10 +13,12 @@ const boxSchema = new mongoose.Schema({
     minlength: [3, "must not be less that 3 charatcters"],
     maxlength: [400, "must not be longer than 400 characters"],
   },
-  lastModified: {
-    type: Date,
-    default: new Date(),
-  },
+  history: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: HISTORY_NAME,
+    }
+  ],
   activity: {
     type: mongoose.Schema.Types.ObjectId,
     ref: ACTIVITY_NAME,

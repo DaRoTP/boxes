@@ -1,7 +1,7 @@
 const { GraphQLObjectType } = require('graphql');
 
 const LocationMutation = require("./location.mutation");
-const ActionMutation = require("./action.mutation");
+const ActivityMutation = require("./activity.mutation");
 const BoxMutation = require("./box.mutation");
 
 
@@ -10,7 +10,7 @@ const RootMutationType = new GraphQLObjectType({
     description: 'Root Mutation',
     fields: () => ({
         ...LocationMutation,
-        ...ActionMutation,
+        ...ActivityMutation,
         ...BoxMutation,
     })
   });

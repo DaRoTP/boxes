@@ -2,10 +2,11 @@
 const activityRepository = require('../../repository/activity.repository');
 const locationRepository = require('../../repository/location.repository');
 const boxRepository = require('../../repository/box.repository');
+const historyRepository = require('../../repository/history.repository');
 
 const boxService = require('../../service/box.service');
 
-const boxServiceMongo = boxService({ activityRepository, locationRepository, boxRepository });
+const boxServiceMongo = boxService({ activityRepository, locationRepository, boxRepository, historyRepository });
 
 module.exports = {
     list: async (req, res, next) => {
@@ -21,6 +22,15 @@ module.exports = {
             const { boxId } = req.params;
             const box = await boxServiceMongo.getOrderById(boxId);
             return res.json(box);
+        } catch (error) {
+            next(error);
+        }
+    },
+    getBoxHistory: async (req, res, next) => {
+        try {
+            const { boxId } = req.params;
+            const { history } = await boxServiceMongo.getAllHistoryEntriesOfABox(boxId);
+            return res.json(history);
         } catch (error) {
             next(error);
         }
@@ -44,6 +54,16 @@ module.exports = {
         try {
             const { boxId } = req.params;
             const updatedOrder = await boxServiceMongo.updateOrder(boxId, req.body);
+            return res.json(updatedOrder)
+        } catch (error) {
+            next(error);
+        }
+    },
+    transferOrder: async (req, res, next) => {
+        try {
+            const { boxId } = req.params;
+            const { targetLocationId } = req.body; 
+            const updatedOrder = await boxServiceMongo.transferBox(boxId, targetLocationId);
             return res.json(updatedOrder)
         } catch (error) {
             next(error);

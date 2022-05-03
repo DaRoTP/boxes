@@ -1,7 +1,7 @@
 const {GraphQLObjectType } = require('graphql')
 
 const LocationQuery = require("./location.query");
-const ActionQuery = require("./action.query");
+const ActionQuery = require("./activity.query");
 const BoxQuery = require("./box.query");
 
 
