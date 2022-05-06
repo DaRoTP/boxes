@@ -44,7 +44,6 @@ module.exports = {
                 return res.json(neBoxOrders)
             } else {
                 const newBoxOrder = await boxServiceMongo.createNewOrder(data);
-                console.log(newBoxOrder);
                 return res.json(newBoxOrder)
             }
         } catch (error) {
