@@ -5,11 +5,8 @@ import Footer from "components/Footer";
 import Router from "Router";
 import { Container } from "@mui/material";
 import { UserType } from "types";
+import {  useNavigate } from "react-router-dom";
 
-const pages = [
-  { label: "locations", to: "/location", isAuth: true },
-  { label: "boxes", to: "/box", isAuth: true },
-];
 
 const someUser = {
   _id: "someID",
@@ -18,6 +15,13 @@ const someUser = {
 
 function App() {
   const [user, setUser] = useState<UserType | null>(null);
+  const navigate = useNavigate();
+
+  const pages = [
+    { label: "locations", callback: () => navigate('/location'), isAuth: true },
+    { label: "boxes", callback: () => navigate('/'), isAuth: true },
+  ];
+
 
   useEffect(() => {
     setUser(someUser)

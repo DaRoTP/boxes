@@ -118,8 +118,8 @@ const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages, user, logoutUser }) =>
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href=""
+            component="span"
+  
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -130,7 +130,9 @@ const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages, user, logoutUser }) =>
               color: "inherit",
               textDecoration: "none",
             }}>
-            Boxes
+            <NavLink style={{ textDecoration: "none", color: "white" }} to="/">
+              Boxes
+            </NavLink>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages
