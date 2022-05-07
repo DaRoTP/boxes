@@ -23,7 +23,7 @@ const Router: React.FC = () => {
       <Route path="/" element={<Boxes />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/box/create" element={<CreateLocation />} />
+      <Route path="/box/create" element={<CreateBox />} />
       <Route path="/box/:boxId" element={<Box />} />
       <Route path="/location" element={<Locations />} />
       <Route path="/location/create" element={<CreateLocation />} />

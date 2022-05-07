@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Table, { HeadingProps } from "components/Table";
-import { MenuItem, Select } from "@mui/material";
+import { Button, MenuItem, Select, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom"; 
 
 const Boxes = () => {
   const [tableHeaders, setTableHeaders] = useState<HeadingProps>({
@@ -44,9 +45,16 @@ const Boxes = () => {
     { col1: "col1 data 3", col2: "col2 data 3", col3: "col3 data 3" },
   ]);
 
+  const navigate = useNavigate();
+
   return (
     <div>
-      <h1>Some Table</h1>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+        <h1>Some Table</h1>
+        <Button  onClick={() => navigate("/box/create")} variant="contained" size="medium">
+          Create Box
+        </Button>
+      </Stack>
       <Table
         headers={tableHeaders}
         data={tableData}

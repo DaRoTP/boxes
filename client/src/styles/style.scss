@@ -8,3 +8,17 @@ body {
 html {
     background-color: #e7f0f2;
 }
+
+#root {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  flex-grow: 1;
+}
