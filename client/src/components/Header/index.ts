@@ -1,5 +1,3 @@
-import { UserType } from "types";
-
 export { default } from "./Header";
 
 export type NavLinkType = {
@@ -9,6 +7,4 @@ export type NavLinkType = {
 };
 export interface AppBarProps {
   pages: NavLinkType[];
-  user: UserType | null;
-  logoutUser: () => void
 }

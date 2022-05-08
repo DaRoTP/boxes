@@ -1,4 +1,6 @@
-import * as React from "react";
+import React, { useContext } from "react";
+import { UserContext, UserActionType } from "context/UserContext";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,10 +16,14 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppBarProps } from "./";
 
-const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages, user, logoutUser }) => {
+const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
+  const {
+    userDispatch,
+    userState: { authStatus, user },
+  } = useContext(UserContext);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -45,8 +51,7 @@ const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages, user, logoutUser }) =>
 
   const logoutHandler = () => {
     handleCloseUserMenu();
-    navigate("/");
-    logoutUser();
+    userDispatch({ type: UserActionType.LOGOUT })
     localStorage.removeItem("user");
   };
 
