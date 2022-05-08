@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Autocomplete, Box, Button, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { debounce } from "throttle-debounce";
+import * as locationService from "service/rest/location.service";
 
 const top100Films = [
   { label: "The Shawshank Redemption", year: 1994 },
@@ -8,29 +11,59 @@ const top100Films = [
 ];
 
 const CreateBox = () => {
-  const searchLocation = (e: any) => {
-    return e;
-  }
+  const [locations, setLocations] = useState([]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isDirty },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      description: "",
+      country: "",
+      city: "",
+      street: "",
+      number: "",
+      postcode: "",
+    },
+  });
+
+  const searchLocations = debounce(1000, async (e) => {
+    if (!e.target.value) {
+      return;
+    }
+    const { data } = await locationService.getLocations({
+      query: e.target.value,
+    });
+    if (data) {
+      const { locations } = data;
+      const locationWithLabel = locations.map((it: any) => ({...it, label: it.identifier}))
+      setLocations(locationWithLabel);
+    }
+  });
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
       <Stack spacing={2}>
         <TextField multiline rows={3} label="description" variant="outlined" fullWidth />
-        <Select displayEmpty inputProps={{ "aria-label": "Without label" }}>
+        <Select inputProps={{ "aria-label": "Without label" }}>
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
           <MenuItem value={30}>Thirty</MenuItem>
         </Select>
         <Autocomplete
           disablePortal
-          options={top100Films}
-          filterOptions={searchLocation}
+          options={locations}
+          onInputChange={searchLocations}
+          loading={true}
           renderInput={(params) => <TextField {...params} label="Origin" />}
         />
         <Autocomplete
           disablePortal
-          options={top100Films}
-          filterOptions={searchLocation}
+          options={locations}
+          onInputChange={searchLocations}
+          loading={true}
           renderInput={(params) => <TextField {...params} label="Destination" />}
         />
         <Button variant="contained" size="medium" fullWidth>

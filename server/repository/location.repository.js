@@ -10,7 +10,7 @@ const list = async () => {
 
 const getById = async (id) => {
     try {
-        return await Location.findById(id);
+        return await Location.findOne({ identifier: id });
     } catch (error) {
         throw new Error(`could not find location with id: ${id}`)        
     }
@@ -18,7 +18,7 @@ const getById = async (id) => {
 
 const deleteById = async (id) => {
     try {
-        return await Location.findByIdAndDelete(id);
+        return await Location.findOneAndDelete({ identifier: id });
     } catch (error) {
         throw new Error(`could not delete location with id: ${id}`)        
     }
@@ -26,7 +26,7 @@ const deleteById = async (id) => {
 
 const updateLocationById = async (id, locationData) => {
     const options = { new: true };
-    return await Location.findByIdAndUpdate(id, locationData, options);
+    return await Location.findOneAndUpdate({ identifier: id }, locationData, options);
 }
 
 const create = async (locationData) => {

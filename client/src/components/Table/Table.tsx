@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -54,7 +54,7 @@ const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }
           <TableHead>
             <TableRow>
               {Object.entries(headers).map(([key, val]) => {
-                return <StyledTableCell key={`header${key}`}>{val.label}</StyledTableCell>;
+                return <StyledTableCell key={`header-${key}`}>{val.label}</StyledTableCell>;
               })}
          
             </TableRow>
@@ -63,10 +63,10 @@ const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }
               </TableCell>
           </TableHead>
           <TableBody>
-            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow hover key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            {data.map((row, index) => (
+              <TableRow hover key={`row-${index}`} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 {Object.entries(headers).map(([key, value]) => (
-                  <TableCell align="left">{value.row ? value.row(row) : row[key]}</TableCell>
+                  <TableCell key={key} align="left">{value.row ? value.row(row) : row[key]}</TableCell>
                 ))}
               </TableRow>
             ))}
@@ -74,7 +74,7 @@ const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 20]}
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}

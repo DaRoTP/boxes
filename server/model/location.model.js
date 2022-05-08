@@ -4,6 +4,13 @@ const makeModel = require("../utils/modelFactory");
 const LOCATION_NAME = "Location";
 
 const locationSchema = new mongoose.Schema({
+  identifier: {
+    type: String,
+    required: [true, "identifier is required"],
+    minlength: [3, 'identifier cant be shorter than 3 characters'],
+    maxlength: [15, 'identifier cant be longer than 15 characters'],
+    unique: [true, "identifier is not available"],
+  },
   country: {
     type: String,
     required: [true, "country is requied"],

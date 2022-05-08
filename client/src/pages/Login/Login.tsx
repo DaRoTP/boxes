@@ -36,14 +36,14 @@ const Login = () => {
       <form onSubmit={handleSubmit(loginSubmit)}>
         <Stack spacing={2}>
           <TextField
-            {...register("username", { required: "username is required" })}
+            {...register("username", { required: "field is required" })}
             error={!!errors.username?.message}
             helperText={errors.username?.message}
             label="username"
             variant="outlined"
           />
           <TextField
-            {...register("password", { required: "username is required" })}
+            {...register("password", { required: "field is required" })}
             error={!!errors.password?.message}
             helperText={errors.password?.message}
             label="password"

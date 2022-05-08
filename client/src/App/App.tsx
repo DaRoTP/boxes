@@ -35,7 +35,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("render");
     loginOnEnter();
     return () => {};
   }, []);
@@ -43,7 +42,7 @@ function App() {
   return (
     <div className="App">
       <Header pages={pages} />
-      <Container maxWidth="md" style={{ marginTop: "2rem", flexGrow: "1" }}>
+      <Container maxWidth="xl" style={{ marginTop: "2rem", flexGrow: "1" }}>
         <Router isAuth={authStatus} />
       </Container>
       <Footer />

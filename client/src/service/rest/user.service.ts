@@ -33,7 +33,6 @@ export const register = async (serviceProps: registerRequest) => {
 };
 
 
-
 interface isAuthRequest {
   isLoading?: (state: boolean) => void;
 }
