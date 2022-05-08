@@ -22,13 +22,13 @@ module.exports = ({ userRepository }) => {
             // find user that is trying to login
             const users = await userRepository.list({ username });
             if(users.length < 1) {
-                throw new Error(`user with username: ${username} does not exists`);
+                throw new Error("bad login");
             }
 
             // check if password is correct
             const isEqual = await bcrypt.compare(password, users[0].password);
             if (!isEqual) {
-              throw new Error('password is incorrect');
+              throw new Error('bad login');
             }
 
             // sign a jwt and send it back
@@ -36,7 +36,7 @@ module.exports = ({ userRepository }) => {
             const jwtOptions = { expiresIn: '1h' }
             const token = jwt.sign(user, ENV.JWT_SECRET, jwtOptions);
 
-            return { token, user };
+            return { token: `Bearer ${token}`, user };
         },
         getAllUsers: () => {
             return userRepository.list();

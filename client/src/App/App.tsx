@@ -6,11 +6,7 @@ import Router from "Router";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { UserContext, UserActionType } from "context/UserContext";
-
-const someUser = {
-  _id: "someID",
-  username: "Darkowksi",
-};
+import * as userService from "service/rest/user.service";
 
 function App() {
   const navigate = useNavigate();
@@ -25,12 +21,22 @@ function App() {
     { label: "boxes", callback: () => navigate("/"), isAuth: true },
   ];
 
+  const loginOnEnter = async () => {
+    const token = localStorage.getItem("token");
+    if (authStatus !== "success" && token) {
+      const { data, error } = await userService.isAuthenticated({});
+      if (data)
+        userDispatch({
+          type: UserActionType.LOGIN_SUCCESS,
+          payload: { user: data },
+        });
+      else if (error) userDispatch({ type: UserActionType.LOGIN_FAIL });
+    }
+  };
+
   useEffect(() => {
-    userDispatch({
-      type: UserActionType.LOGIN_SUCCESS,
-      payload: { user: someUser, token: "sometoken" },
-    });
-    // setUser(someUser)
+    console.log("render");
+    loginOnEnter();
     return () => {};
   }, []);
 

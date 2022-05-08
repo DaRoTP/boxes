@@ -21,6 +21,15 @@ module.exports = {
             next(error);
         }
     },
+    getLoggedInuUser: async (req, res, next) => {
+        try {
+            const userId = req.userId;
+            const user = await userServiceMongo.getUserByID(userId);
+            return res.json({ _id: user._id, username: user.username });
+        } catch (error) {
+            next(error);
+        }
+    },
     getById: async (req, res, next) => {
         try {
             const { userId } = req.params;

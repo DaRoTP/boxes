@@ -22,7 +22,7 @@ const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages }) => {
   const navigate = useNavigate();
   const {
     userDispatch,
-    userState: { authStatus, user },
+    userState: { user },
   } = useContext(UserContext);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -168,7 +168,7 @@ const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages }) => {
             ) : (
               <>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={user.username} src="/static/images/avatar/2.jpg" />
+                  <Avatar alt={user.username} />
                 </IconButton>
                 <Menu
                   sx={{ mt: "45px" }}
@@ -185,9 +185,6 @@ const ResponsiveAppBar: React.FC<AppBarProps> = ({ pages }) => {
                   }}
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}>
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Profile</Typography>
-                  </MenuItem>
                   <MenuItem onClick={logoutHandler}>
                     <Typography textAlign="center">Logout</Typography>
                   </MenuItem>
