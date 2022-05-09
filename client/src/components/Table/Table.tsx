@@ -11,15 +11,16 @@ import { BasicTableProps } from "./index";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.light,
     color: theme.palette.common.white,
+    fontWeight: 'bold'
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
 }));
 
-const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }) => {
+const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData, totalItemsCount }) => {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [isLoadingData, setIsLoadingData] = useState<boolean>(false);
@@ -34,7 +35,7 @@ const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }
   
     return () => {
     }
-  }, [page])
+  }, [page, rowsPerPage])
   
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -58,8 +59,8 @@ const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }
               })}
          
             </TableRow>
-              <TableCell style={{opacity: isLoadingData ? '1' : '0'}} padding="none" colSpan={3}>
-                <LinearProgress color="inherit" />
+              <TableCell style={{opacity: isLoadingData ? '1' : '0'}} padding="none" colSpan={Object.keys(headers).length}>
+                <LinearProgress color="primary" />
               </TableCell>
           </TableHead>
           <TableBody>
@@ -76,7 +77,7 @@ const BasicTable: React.FC<BasicTableProps> = ({ headers, data, fetchTableData }
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component="div"
-        count={data.length}
+        count={totalItemsCount || data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

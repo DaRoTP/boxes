@@ -66,6 +66,8 @@ const CreateBox = () => {
     }
     const { data } = await locationService.getLocations({
       query: e.target.value,
+      page: 0,
+      perPage: 6
     });
     if (data) {
       const { locations } = data;

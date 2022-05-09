@@ -20,9 +20,6 @@ export interface FetchTableProps {
 export interface BasicTableProps {
   headers: Record<string, HeaderProps>;
   data: Record<string, any>[];
-  pagination?: {
-    rowsPerPage?: number,
-    page?: ''
-  },
+  totalItemsCount?: number;
   fetchTableData: (props: FetchTableProps) => void
 }
