@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Autocomplete, Box, Button, Grid, MenuItem, Select,  TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { debounce } from "throttle-debounce";
 import * as locationService from "service/rest/location.service";
@@ -52,10 +61,12 @@ const CreateBox = () => {
     return () => {};
   }, []);
 
-
   const submitCreateNewBox = async (val: any) => {
-    const { data } = await boxService.createNewBoxOrder({ payload: val });
-    if(data) {
+    const { activity, description, origin, destination } = val;
+    const { data } = await boxService.createNewBoxOrder({
+      payload: { activityId: activity, description, originId: origin, destinationId: destination },
+    });
+    if (data) {
       navigate("/");
     }
   };
@@ -67,7 +78,7 @@ const CreateBox = () => {
     const { data } = await locationService.getLocations({
       query: e.target.value,
       page: 0,
-      perPage: 6
+      perPage: 6,
     });
     if (data) {
       const { locations } = data;
@@ -113,7 +124,7 @@ const CreateBox = () => {
               {...register("origin", {
                 required: "field is required",
               })}
-              onChange={(_, val) => val && setValue('origin', (val as LocationType).identifier)}
+              onChange={(_, val) => val && setValue("origin", (val as LocationType).identifier)}
               disablePortal
               options={locations}
               onInputChange={searchLocations}
@@ -133,7 +144,9 @@ const CreateBox = () => {
               {...register("destination", {
                 required: "field is required",
               })}
-              onChange={(_, val) => val && setValue('destination', (val as LocationType).identifier)}
+              onChange={(_, val) =>
+                val && setValue("destination", (val as LocationType).identifier)
+              }
               disablePortal
               options={locations}
               onInputChange={searchLocations}

@@ -4,6 +4,8 @@ const locationRepository = require('../../repository/location.repository');
 const boxRepository = require('../../repository/box.repository');
 const historyRepository = require('../../repository/history.repository');
 
+const paginate = require("../../utils/paginate");
+
 const boxService = require('../../service/box.service');
 
 const boxServiceMongo = boxService({ activityRepository, locationRepository, boxRepository, historyRepository });
@@ -11,7 +13,13 @@ const boxServiceMongo = boxService({ activityRepository, locationRepository, box
 module.exports = {
     list: async (req, res, next) => {
         try {
-            const boxes = await boxServiceMongo.getAllOrders();
+            const { page, perPage, query } = req.query;
+            let boxes = await boxServiceMongo.getAllOrders({ query });
+      
+            if (page !== undefined && perPage !== undefined) {
+              const { totalItems, totalPages, data } = paginate(boxes, page, perPage);
+              return res.json({ boxes: data, totalItems, totalPages  });
+            }
             return res.json({ boxes });
         } catch (error) {
             next(error);

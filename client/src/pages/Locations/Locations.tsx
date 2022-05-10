@@ -48,9 +48,11 @@ const Locations = () => {
         headers={tableHeaders}
         data={tableData}
         totalItemsCount={totalItemsCount}
-        fetchTableData={({ pagination, isLoading, setLoading }) => {
+        fetchTableData={async ({ pagination, setLoading }) => {
           const { page, rowsPerPage } = pagination;
-          fetchAllLocations(page, rowsPerPage);
+          setLoading(true);
+          await fetchAllLocations(page, rowsPerPage);
+          setLoading(false);
         }}
       />
     </div>
