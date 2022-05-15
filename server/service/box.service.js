@@ -1,4 +1,4 @@
-module.exports = ({ boxRepository, locationRepository, activityRepository, historyRepository }) => {
+module.exports = ({ boxRepository, locationRepository, activityRepository }) => {
     return ({
         getAllOrders: async () => {
             return await boxRepository.list();
@@ -14,10 +14,9 @@ module.exports = ({ boxRepository, locationRepository, activityRepository, histo
 
             const activity = await activityRepository.getById(activityId);
 
-            const locationHistoryData = { currentLocation: origin, timeStamp: new Date()} 
-            const locationHistory = await historyRepository.create(locationHistoryData);
+            const locationHistoryData = { currentLocation: origin, timeStamp: new Date(), activity } 
 
-            const newBox = await boxRepository.create({ description, origin, destination, activity, history: [locationHistory] });
+            const newBox = await boxRepository.create({ description, origin, destination, activity, history: [locationHistoryData] });
 
             return { 
                 _id: newBox._id,
@@ -41,10 +40,9 @@ module.exports = ({ boxRepository, locationRepository, activityRepository, histo
                 const destination = await locationRepository.getById(destinationId);
                 const activity = await activityRepository.getById(activityId);
 
-                const locationHistoryData = { currentLocation: origin, timeStamp: new Date()} 
-                const locationHistory = await historyRepository.create(locationHistoryData);
+                const locationHistoryData = { currentLocation: origin, timeStamp: new Date(), activity } 
 
-                newOrders.push({ description, activity, origin, destination, history: [locationHistory] })
+                newOrders.push({ description, activity, origin, destination, history: [locationHistoryData] })
             }
 
             const savedOrders = await boxRepository.createMany(newOrders);
@@ -72,15 +70,18 @@ module.exports = ({ boxRepository, locationRepository, activityRepository, histo
             await boxRepository.getById(id);
             return await boxRepository.deleteById(id);
         },
-        transferBox: async (id, targetLocationId) => {
+        transferBox: async (id, targetLocationId, activityId) => {
+            const boxHistory = await boxRepository.getBoxHistoryById(id);
             const box = await boxRepository.getById(id);
             const targetLocation = await locationRepository.getById(targetLocationId);
+            const activity = await activityRepository.getById(activityId);
 
-            const locationHistoryData = { currentLocation: targetLocation, timeStamp: new Date()} 
-            const locationHistory = await historyRepository.create(locationHistoryData);
+            const locationHistoryData = { currentLocation: targetLocation, timeStamp: new Date(), activity} 
 
-            box.history.push(locationHistory);
+            boxHistory.history.push(locationHistoryData);
+            box.activity = activity;
 
+            boxRepository.save(boxHistory);
             boxRepository.save(box);
         },
         getAllHistoryEntriesOfABox: (id) => {

@@ -30,7 +30,7 @@ const isAuth = (req, _, next) => {
 
 const isAuthThrow = (req, res, next) => {
   if(!req.isAuth) {
-    throw new Error("Unauthorized");
+    return res.status(401).json({ message: 'unauthorized'});
   }
   next();
 };

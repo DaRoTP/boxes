@@ -22,7 +22,7 @@ const getBoxHistoryById = async (id) => {
         return await Box.findOne({ _id: id }, "history").populate({ 
             path: "history",
             populate: {
-                path: "currentLocation"
+                path: "currentLocation activity"
             }
         });
     } catch (error) {

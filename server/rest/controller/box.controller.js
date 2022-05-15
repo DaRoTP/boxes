@@ -2,13 +2,12 @@
 const activityRepository = require('../../repository/activity.repository');
 const locationRepository = require('../../repository/location.repository');
 const boxRepository = require('../../repository/box.repository');
-const historyRepository = require('../../repository/history.repository');
 
 const paginate = require("../../utils/paginate");
 
 const boxService = require('../../service/box.service');
 
-const boxServiceMongo = boxService({ activityRepository, locationRepository, boxRepository, historyRepository });
+const boxServiceMongo = boxService({ activityRepository, locationRepository, boxRepository });
 
 module.exports = {
     list: async (req, res, next) => {
@@ -70,8 +69,8 @@ module.exports = {
     transferOrder: async (req, res, next) => {
         try {
             const { boxId } = req.params;
-            const { targetLocationId } = req.body; 
-            const updatedOrder = await boxServiceMongo.transferBox(boxId, targetLocationId);
+            const { targetLocationId, activityId } = req.body; 
+            const updatedOrder = await boxServiceMongo.transferBox(boxId, targetLocationId, activityId);
             return res.json(updatedOrder)
         } catch (error) {
             next(error);

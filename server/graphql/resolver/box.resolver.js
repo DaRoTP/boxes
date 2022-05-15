@@ -3,10 +3,9 @@ const boxService = require("../../service/box.service");
 const boxRepository = require('../../repository/box.repository');
 const activityRepository = require('../../repository/activity.repository');
 const locationRepository = require('../../repository/location.repository');
-const historyRepository = require('../../repository/history.repository');
 
 
-const boxServiceMongo = boxService({ boxRepository, locationRepository, activityRepository, historyRepository });
+const boxServiceMongo = boxService({ boxRepository, locationRepository, activityRepository });
 
 module.exports = {
     list: async () => {

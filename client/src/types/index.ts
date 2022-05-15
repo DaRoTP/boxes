@@ -24,4 +24,11 @@ export interface BoxType {
   activity: ActivityType;
   origin: LocationType;
   destination: LocationType;
+  description: string;
+}
+
+export interface BoxHistoryEntryType {
+  currentLocation: LocationType;
+  activity: ActivityType;
+  timeStamp: string;
 }

@@ -1,4 +1,5 @@
 import axios, { Method, AxiosResponse } from "axios";
+import history from "conf/history.conf";
 
 export interface callAPIParams {
   url: string;
@@ -48,11 +49,13 @@ async function callAPI({
       data: payload,
     });
     !!setLoading && setLoading(false);
+
     return responseHandler(res);
   } catch (error) {
-    if (!axios.isCancel(error)) {
-      !!setLoading && setLoading(false);
+    if(error.response.status === 401) {
+      window.location.href = '/login';
     }
+
     return errorHandler(error);
   }
 }

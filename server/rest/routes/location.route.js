@@ -6,7 +6,7 @@ const { isAuth, isAuthThrow } = require('../../middleware/isAuth.middleware');
 
 router
   .route("/")
-  .get(LocationController.list)
+  .get(isAuth, isAuthThrow, LocationController.list)
   .post(isAuth, isAuthThrow, LocationController.create);
 
 router
