@@ -23,7 +23,7 @@ function App() {
 
   const loginOnEnter = async () => {
     const token = localStorage.getItem("token");
-    if (authStatus !== "success" && token) {
+    if (token) {
       const { data, error } = await userService.isAuthenticated({});
       if (data)
         userDispatch({

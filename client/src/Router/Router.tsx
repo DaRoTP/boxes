@@ -17,7 +17,7 @@ interface RouteRestrictedProps extends RouteProps {
 
 const ProtectedRoute: React.FC<RouteRestrictedProps> = ({
   condition,
-  redirectPath = "/landing",
+  redirectPath = "/",
   children,
 }) => {
   if (!condition) {
