@@ -1,18 +1,16 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Router from "Router";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { UserContext, UserActionType } from "context/UserContext";
-import * as userService from "service/rest/user.service";
+import { UserContext } from "context/UserContext";
 
 function App() {
   const navigate = useNavigate();
 
   const {
-    userDispatch,
     userState: { authStatus },
   } = useContext(UserContext);
 
@@ -21,23 +19,6 @@ function App() {
     { label: "boxes", callback: () => navigate("/"), isAuth: true },
   ];
 
-  const loginOnEnter = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const { data, error } = await userService.isAuthenticated({});
-      if (data)
-        userDispatch({
-          type: UserActionType.LOGIN_SUCCESS,
-          payload: { user: data },
-        });
-      else if (error) userDispatch({ type: UserActionType.LOGIN_FAIL });
-    }
-  };
-
-  useEffect(() => {
-    loginOnEnter();
-    return () => {};
-  }, []);
 
   return (
     <div className="App">
