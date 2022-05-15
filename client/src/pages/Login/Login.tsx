@@ -1,6 +1,7 @@
 import { Box, Button, Stack, TextField } from "@mui/material";
 import React, { useContext } from "react";
-import * as userService from "service/rest/user.service";
+import * as RESTuserService from "service/rest/user.service";
+import * as GQLuserService from "service/graphql/user.service";
 import { useForm } from "react-hook-form";
 import { UserContext, UserActionType } from "context/UserContext";
 
@@ -21,12 +22,21 @@ const Login = () => {
   const { userDispatch } = useContext(UserContext);
 
   const loginSubmit = async (values: any) => {
-    const { data, error } = await userService.login({ payload: values });
+    // const { data, error } = await RESTuserService.login({ payload: values });
+    // if (error) {
+    //   setError("username", { type: "badLogin", message: error.message });
+    //   setError("password", { type: "badLogin", message: error.message });
+    // } else if (data) {
+    //   const { token, user } = data;
+    //   userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
+    // }
+
+    const { data, error } = await GQLuserService.login({ payload: values });
     if (error) {
       setError("username", { type: "badLogin", message: error.message });
       setError("password", { type: "badLogin", message: error.message });
     } else if (data) {
-      const { token, user } = data;
+      const { token, user } = data.login;
       userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
     }
   };

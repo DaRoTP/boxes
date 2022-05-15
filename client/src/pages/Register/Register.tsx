@@ -1,6 +1,9 @@
 import { Box, Button, Stack, TextField } from "@mui/material";
 import React, { useRef, useContext } from "react";
-import * as userService from "service/rest/user.service";
+import * as RESTuserService from "service/rest/user.service";
+import * as GQLuserService from "service/graphql/user.service";
+import GQLApiCall from "service/utils/GQLApiCall";
+
 import { useForm } from "react-hook-form";
 import { UserContext, UserActionType } from "context/UserContext";
 
@@ -27,12 +30,53 @@ const Register = () => {
 
   const registerSubmit = async (values: any) => {
     const { username, password } = values;
-    const { data, error } = await userService.register({ payload: { username, password } });
-    if (error) {
-      setError("username", { type: "usernameTaken", message: error.message });
-    } else if (data) {
-      const { data: { token, user } } = await userService.login({ payload: { username, password } });
-      userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
+    // const { data, error } = await RESTuserService.register({ payload: { username, password } });
+    // if (error) {
+    //   setError("username", { type: "usernameTaken", message: error.message });
+    // } else if (data) {
+    //   const { data: { token, user } } = await RESTuserService.login({ payload: { username, password } });
+    //   userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
+    // }
+
+    const { data, errors } = await GQLApiCall({
+      query: {
+        query: `mutation REGISTER($username: String!, $password: String!){
+          register(username: $username, password: $password) { 
+            _id,
+            username
+          }
+        }`,
+        variables: {
+          username,
+          password,
+        },
+      },
+    });
+
+    if (errors?.length > 0) {
+      setError("username", { type: "usernameTaken", message: errors[0].message });
+    } else if (data.register) {
+      const { data } = await GQLApiCall({
+        query: {
+          query: `query LOGIN($username: String!, $password: String!){
+            login(username: $username, password: $password) { 
+              user {
+                _id,
+                username
+              },
+              token
+            }
+          }`,
+          variables: {
+            username,
+            password,
+          },
+        },
+      });
+      if (data.login) {
+        const { user, token } = data.login;
+        userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
+      }
     }
   };
 

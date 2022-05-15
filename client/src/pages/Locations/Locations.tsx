@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Table, { HeadingProps } from "components/Table";
 import { Button, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import * as locationService from "service/rest/location.service";
+import * as RESTlocationService from "service/rest/location.service";
+import * as GQLlocationService from "service/graphql/location.service";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const Locations = () => {
@@ -20,7 +21,10 @@ const Locations = () => {
   const navigate = useNavigate();
 
   const fetchAllLocations = async (page: number, perPage: number) => {
-    const { data } = await locationService.getLocations({ page, perPage });
+    
+    const { data } = await GQLlocationService.getLocations({ page, perPage });
+    
+    // const { data } = await RESTlocationService.getLocations({ page, perPage });
     if (data) {
       const { totalItems, locations } = data;
       setTableData(locations);

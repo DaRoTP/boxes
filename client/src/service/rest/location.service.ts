@@ -1,9 +1,5 @@
 import RESTApiCall from "../utils/RESTApiCall";
 
-interface getLocationsRequest {
-  isLoading?: (state: boolean) => void;
-}
-
 interface createLocationRequest {
   isLoading?: (state: boolean) => void;
   payload: {

@@ -1,10 +1,8 @@
-import axios, { Method, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export interface callAPIParams {
-  url: string;
-  method: Method;
   token?: boolean;
-  payload?: any;
+  query: any;
   params?: object;
   setLoading?: (state: boolean) => void
 }
@@ -13,25 +11,21 @@ function responseHandler(response: AxiosResponse) {
   return {
     data: response.data,
     error: null,
-    status: response.status,
   };
 }
 
 function errorHandler(error: any) {
   return {
     data: null,
-    error: error.response?.data,
-    status: error.response?.status,
+    error: error.response?.data?.length,
   };
 }
 
 
 async function callAPI({
-  url,
-  method,
   params,
   token,
-  payload,
+  query,
   setLoading,
 }: callAPIParams) {
 
@@ -40,24 +34,31 @@ async function callAPI({
   
   !!setLoading && setLoading(true);
   try {
-    const res = await axios({
-      method,
+    const res: AxiosResponse = await axios({
+      url: "/api/graphql",
+      method: 'POST',
       headers,
-      params,
-      url: `/api${url}`,
-      data: payload,
+      data: query,
     });
     !!setLoading && setLoading(false);
 
-    return responseHandler(res);
-  } catch (error) {
-    if(error.response.status === 401) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      window.location.href = '/login';
-    }
+    const { data, errors } = res.data;
 
-    return errorHandler(error);
+    return {
+      data, errors
+    };
+
+  } catch (error) {
+    // if(error.response.status === 401) {
+    //   localStorage.removeItem("user");
+    //   localStorage.removeItem("token");
+    //   window.location.href = '/login';
+    // }
+
+    return {
+      data: null,
+      error: error.response?.data?.length,
+    };
   }
 }
 

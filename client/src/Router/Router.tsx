@@ -65,9 +65,7 @@ const Router: React.FC<{ isAuth: AuthStatus }> = ({ isAuth }) => {
       <Route
         path="/location"
         element={
-          <ProtectedRoute redirectPath="/login" condition={isAuth === "success"}>
-            <Locations />
-          </ProtectedRoute>
+          <Locations />
         }
       />
       <Route

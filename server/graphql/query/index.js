@@ -3,6 +3,7 @@ const {GraphQLObjectType } = require('graphql')
 const LocationQuery = require("./location.query");
 const ActionQuery = require("./activity.query");
 const BoxQuery = require("./box.query");
+const UserQuery = require("./user.query");
 
 
 const RootQueryType = new GraphQLObjectType({
@@ -12,6 +13,7 @@ const RootQueryType = new GraphQLObjectType({
       ...LocationQuery,
       ...ActionQuery,
       ...BoxQuery,
+      ...UserQuery,
     })
 });
 
