@@ -1,10 +1,12 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import * as locationService from "service/rest/location.service";
-import { useNavigate } from "react-router-dom";
 
-const CreateLocation = () => {
+interface CreateLocationProps {
+  submitNewLocation: (values: any) => void
+}
+
+const CreateLocation: React.FC<CreateLocationProps> = ({ submitNewLocation }) => {
   const {
     register,
     handleSubmit,
@@ -21,14 +23,6 @@ const CreateLocation = () => {
     },
   });
 
-  const navigate = useNavigate();
-
-  const submitNewLocation = async (values: any) => {
-    const { data } = await locationService.createLocation({ payload: values });
-    if(data) {
-      navigate("/location");
-    }
-  };
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>

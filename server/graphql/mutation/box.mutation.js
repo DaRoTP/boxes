@@ -28,7 +28,6 @@ module.exports = {
             boxes: { type: new GraphQLList(BoxInputTypeDef) },
         },
         resolve: (_, { id, box, boxes }) => {
-            const data = boxes || box 
             return boxResolver.updateBox(id, box);
         },
     },
@@ -38,5 +37,14 @@ module.exports = {
             id: { type:  new GraphQLNonNull(GraphQLID)},
         },
         resolve: (_, { id }) => boxResolver.deleteBox(id),
+    },
+    transferBox: {
+        type: BoxTypeDef,
+        args: {
+            id: { type:  new GraphQLNonNull(GraphQLID)},
+            targetLocationId: { type:  new GraphQLNonNull(GraphQLID)},
+            activityId: { type:  new GraphQLNonNull(GraphQLID)},
+        },
+        resolve: boxResolver.transferBox,
     }
 }

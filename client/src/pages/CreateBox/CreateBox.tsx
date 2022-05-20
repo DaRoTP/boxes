@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Autocomplete,
   Box,
@@ -10,23 +10,24 @@ import {
   Typography,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { debounce } from "throttle-debounce";
-import * as locationService from "service/rest/location.service";
-import * as activityService from "service/rest/activity.service";
-import * as boxService from "service/rest/box.service";
-import { ActivityType, LocationType } from "types";
-import { useNavigate } from "react-router-dom";
 
-interface ActivityOptionType extends ActivityType {
-  label: string;
+import { ActivityType, LocationType } from "types";
+
+interface CreateBoxProps {
+  locations: LocationType[];
+  searchLocations: (e: any) => void;
+  activities: ActivityType[];
+  fetchAllActivities: () => void;
+  submitCreateNewBox: (values: any) => void;
 }
 
-const CreateBox = () => {
-  const navigate = useNavigate();
-  const [locations, setLocations] = useState([]);
-
-  const [activities, setActivities] = useState<ActivityOptionType[]>([]);
-
+const CreateBox: React.FC<CreateBoxProps> = ({
+  locations,
+  searchLocations,
+  activities,
+  fetchAllActivities,
+  submitCreateNewBox,
+}) => {
   const {
     register,
     handleSubmit,
@@ -42,50 +43,10 @@ const CreateBox = () => {
     },
   });
 
-  const fetchAllActivities = async () => {
-    const { data } = await activityService.getAllActivities({});
-    if (data) {
-      setActivities(
-        data.activities.map(({ _id, code, name }: any) => ({
-          _id,
-          code,
-          name,
-          label: `${code} - ${name}`,
-        }))
-      );
-    }
-  };
-
   useEffect(() => {
     fetchAllActivities();
     return () => {};
   }, []);
-
-  const submitCreateNewBox = async (val: any) => {
-    const { activity, description, origin, destination } = val;
-    const { data } = await boxService.createNewBoxOrder({
-      payload: { activityId: activity, description, originId: origin, destinationId: destination },
-    });
-    if (data) {
-      navigate("/");
-    }
-  };
-
-  const searchLocations = debounce(1000, async (e) => {
-    if (!e.target.value) {
-      return;
-    }
-    const { data } = await locationService.getLocations({
-      query: e.target.value,
-      page: 0,
-      perPage: 6,
-    });
-    if (data) {
-      const { locations } = data;
-      const locationWithLabel = locations.map((it: any) => ({ ...it, label: it.identifier }));
-      setLocations(locationWithLabel);
-    }
-  });
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
@@ -114,7 +75,7 @@ const CreateBox = () => {
               fullWidth>
               {activities.map((activity) => (
                 <MenuItem key={activity._id} value={activity._id}>
-                  {activity.label}
+                  {`${activity.code} - ${activity.name}`}
                 </MenuItem>
               ))}
             </Select>

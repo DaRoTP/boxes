@@ -82,7 +82,8 @@ module.exports = ({ boxRepository, locationRepository, activityRepository }) => 
             box.activity = activity;
 
             boxRepository.save(boxHistory);
-            boxRepository.save(box);
+            boxRepository.save();
+            return box;
         },
         getAllHistoryEntriesOfABox: (id) => {
             return boxRepository.getBoxHistoryById(id)

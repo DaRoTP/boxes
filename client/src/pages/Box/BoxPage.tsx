@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Box,
   Button,
@@ -18,34 +18,30 @@ import {
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import moment from "moment";
-import * as boxService from "service/rest/box.service";
-import * as locationService from "service/rest/location.service";
-import * as activityService from "service/rest/activity.service";
 
-import { useParams } from "react-router-dom";
 import { BoxType, BoxHistoryEntryType, ActivityType, LocationType } from "types";
-import { debounce } from "throttle-debounce";
 import { useForm } from "react-hook-form";
 
-interface ActivityOptionType extends ActivityType {
-  label: string;
+
+interface BoxPageProps {
+    boxId: string;
+    boxDetails: Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity">>;
+    boxHistory: BoxHistoryEntryType[];
+    submitTransfer: (val: any) => void;
+    locations: LocationType[];
+    activities: ActivityType[];
+    searchLocations: (e: any) => void;
 }
 
-const BoxPage = () => {
-  const { boxId } = useParams();
-  const [boxDetails, setBoxDetails] = useState<
-    Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity">>
-  >({
-    description: "",
-    destination: undefined,
-    origin: undefined,
-  });
-  const [locations, setLocations] = useState([]);
-  const [boxHistory, setBoxHistory] = useState<BoxHistoryEntryType[]>([]);
-  const [activities, setActivities] = useState<ActivityOptionType[]>([]);
-
-  const [isLoading, setLoading] = useState<boolean>(false);
-
+const BoxPage: React.FC<BoxPageProps> = ({
+  boxId,
+  boxDetails,
+  boxHistory,
+  submitTransfer,
+  locations,
+  activities,
+  searchLocations,
+}) => {
   const {
     register,
     handleSubmit,
@@ -58,69 +54,6 @@ const BoxPage = () => {
       activity: "",
     },
   });
-
-  const searchLocations = debounce(1000, async (e) => {
-    if (!e.target.value) {
-      return;
-    }
-    const { data } = await locationService.getLocations({
-      query: e.target.value,
-      page: 0,
-      perPage: 6,
-    });
-    if (data) {
-      const { locations } = data;
-      const locationWithLabel = locations.map((it: any) => ({ ...it, label: it.identifier }));
-      setLocations(locationWithLabel);
-    }
-  });
-
-  const fetchBoxHistory = async () => {
-    if (boxId) {
-      const { data: historyData } = await boxService.getBoxHistory({ id: boxId });
-      setBoxHistory(historyData);
-    }
-  };
-
-  const fetchBoxDetails = async () => {
-    if (boxId) {
-      const { data } = await boxService.getBox({ id: boxId });
-      const { description, destination, origin, activity } = data;
-      setBoxDetails({ description, destination, origin, activity });
-    }
-  };
-
-  const submitTransfer = async (values: any) => {
-    console.log(values);
-    await boxService.transferOrder({
-      id: boxId!,
-      targetLocationId: values.location,
-      activityId: values.activity,
-    });
-    await fetchBoxHistory();
-    await fetchBoxDetails();
-  };
-
-  const fetchAllActivities = async () => {
-    const { data } = await activityService.getAllActivities({});
-    if (data) {
-      setActivities(
-        data.activities.map(({ _id, code, name }: any) => ({
-          _id,
-          code,
-          name,
-          label: `${code} - ${name}`,
-        }))
-      );
-    }
-  };
-
-  useEffect(() => {
-    fetchBoxDetails();
-    fetchBoxHistory();
-    fetchAllActivities();
-    return () => {};
-  }, []);
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
@@ -188,7 +121,7 @@ const BoxPage = () => {
             </Typography>
             <Divider style={{ margin: "1rem 0" }} />
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              {boxDetails.description}
+              {boxDetails?.description}
             </Typography>
           </CardContent>
         </Card>
@@ -220,9 +153,9 @@ const BoxPage = () => {
                 error={!!errors.activity?.message}
                 inputProps={{ "aria-label": "Without label" }}
                 fullWidth>
-                {activities.map((activity) => (
+                {activities?.map((activity) => (
                   <MenuItem key={activity._id} value={activity._id}>
-                    {activity.label}
+                    {`${activity.code} - ${activity.name}`}
                   </MenuItem>
                 ))}
               </Select>
@@ -248,7 +181,7 @@ const BoxPage = () => {
             </Typography>
             <Divider style={{ margin: "1rem 0" }} />
             <Grid container spacing={2}>
-              {boxHistory.map((historyEntry) => (
+              {boxHistory?.map((historyEntry) => (
                 <>
                   <Grid item xs={4}>
                     <Chip label={historyEntry?.currentLocation?.identifier} />

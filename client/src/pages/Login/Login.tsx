@@ -1,11 +1,12 @@
 import { Box, Button, Stack, TextField } from "@mui/material";
-import React, { useContext } from "react";
-import * as RESTuserService from "service/rest/user.service";
-import * as GQLuserService from "service/graphql/user.service";
-import { useForm } from "react-hook-form";
-import { UserContext, UserActionType } from "context/UserContext";
+import React from "react";
+import { useForm, UseFormSetError } from "react-hook-form";
 
-const Login = () => {
+interface LoginProps {
+  loginSubmit: (values: any, setError: UseFormSetError<{ username: string; password: string; }>) => void;
+}
+
+const Login: React.FC<LoginProps> = ({ loginSubmit }) => {
   const {
     register,
     setError,
@@ -19,31 +20,9 @@ const Login = () => {
     },
   });
 
-  const { userDispatch } = useContext(UserContext);
-
-  const loginSubmit = async (values: any) => {
-    // const { data, error } = await RESTuserService.login({ payload: values });
-    // if (error) {
-    //   setError("username", { type: "badLogin", message: error.message });
-    //   setError("password", { type: "badLogin", message: error.message });
-    // } else if (data) {
-    //   const { token, user } = data;
-    //   userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
-    // }
-
-    const { data, error } = await GQLuserService.login({ payload: values });
-    if (error) {
-      setError("username", { type: "badLogin", message: error.message });
-      setError("password", { type: "badLogin", message: error.message });
-    } else if (data) {
-      const { token, user } = data.login;
-      userDispatch({ type: UserActionType.LOGIN_SUCCESS, payload: { token, user } });
-    }
-  };
-
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
-      <form onSubmit={handleSubmit(loginSubmit)}>
+      <form onSubmit={handleSubmit((val) => loginSubmit(val, setError))}>
         <Stack spacing={2}>
           <TextField
             {...register("username", { required: "field is required" })}

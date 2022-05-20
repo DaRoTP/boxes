@@ -2,6 +2,7 @@ const {
   GraphQLObjectType,
   GraphQLInputObjectType,
   GraphQLString,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLID,
 } = require('graphql');
@@ -9,8 +10,7 @@ const {
 const { ActivityTypeDef } = require('./activity.typedef');
 const { LocationTypeDef } = require('./location.typedef');
 
-const locationResolver = require('../resolver/location.resolver');
-const activityResolver = require('../resolver/activity.resolver');
+const boxResolver = require("../resolver/box.resolver");
 
 const BoxTypeDef = new GraphQLObjectType({
     name: 'Box',
@@ -18,18 +18,24 @@ const BoxTypeDef = new GraphQLObjectType({
     fields: () => ({
       _id: { type: new GraphQLNonNull(GraphQLID) },
       description: { type: new GraphQLNonNull(GraphQLString) },
-      activity: {
-        type: ActivityTypeDef,
-        resolve: (box) => activityResolver.getById(box.activity)
-      },
-      origin: {
-        type: LocationTypeDef,
-        resolve: (box) => locationResolver.getById(box.origin)
-      },
-      destination: {
-        type: LocationTypeDef,
-        resolve: (box) => locationResolver.getById(box.destination)
+      activity: { type: ActivityTypeDef },
+      origin: { type: LocationTypeDef },
+      destination: { type: LocationTypeDef },
+      history: {
+        type: new GraphQLList(BoxHistoryEntryTypeDef),
+        resolve: (parent) => boxResolver.getBoxHistoryById(null,{ id: parent._id }),
       }
+    })
+});
+
+const BoxHistoryEntryTypeDef = new GraphQLObjectType({
+    name: 'BoxHistoryEntry',
+    description: 'This represents a box/order history entry',
+    fields: () => ({
+      _id: { type: new GraphQLNonNull(GraphQLID) },
+      activity: { type: ActivityTypeDef },
+      currentLocation: { type: LocationTypeDef },
+      timeStamp: { type: GraphQLString },
     })
 });
 
@@ -44,4 +50,4 @@ const BoxInputTypeDef = new GraphQLInputObjectType({
   })
 });
 
-module.exports = { BoxTypeDef, BoxInputTypeDef };
+module.exports = { BoxTypeDef, BoxInputTypeDef, BoxHistoryEntryTypeDef };
