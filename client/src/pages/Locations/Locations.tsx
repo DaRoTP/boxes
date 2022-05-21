@@ -30,10 +30,12 @@ const Locations: React.FC<LocationProps> = ({ tableData, totalItemsCount, fetchA
         justifyContent="space-between"
         alignItems="center"
         spacing={2}>
-        <Typography fontWeight="bold" variant="h5">
+        <div style={{ display: "flex", placeItems: "center", gap: "0.2rem" }}>
           <LocationOnIcon />
-          Locations
-        </Typography>
+          <Typography fontWeight="bold" variant="h5">
+            Locations
+          </Typography>
+        </div>
         <Button onClick={() => navigate("/location/create")} variant="contained" size="medium">
           Create Location
         </Button>

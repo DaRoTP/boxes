@@ -3,7 +3,9 @@ import {
   Autocomplete,
   Box,
   Button,
+  FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -50,7 +52,7 @@ const CreateBox: React.FC<CreateBoxProps> = ({
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
-      <Typography sx={{ marginBottom: "2rem" }} gutterBottom variant="h5">
+      <Typography sx={{ marginBottom: "2rem" }} gutterBottom variant="h5" fontWeight="bold">
         Create Box Order
       </Typography>
       <form onSubmit={handleSubmit(submitCreateNewBox)}>
@@ -68,17 +70,22 @@ const CreateBox: React.FC<CreateBoxProps> = ({
             />
           </Grid>
           <Grid item xs={12}>
-            <Select
-              {...register("activity", { required: "field is required" })}
-              error={!!errors.activity?.message}
-              inputProps={{ "aria-label": "Without label" }}
-              fullWidth>
-              {activities.map((activity) => (
-                <MenuItem key={activity._id} value={activity._id}>
-                  {`${activity.code} - ${activity.name}`}
-                </MenuItem>
-              ))}
-            </Select>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Activity</InputLabel>
+              <Select
+                {...register("activity", { required: "field is required" })}
+                error={!!errors.activity?.message}
+                labelId="demo-simple-select-label"
+                label="Activity"
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth>
+                {activities.map((activity) => (
+                  <MenuItem key={activity._id} value={activity._id}>
+                    {`${activity.code} - ${activity.name}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={6}>
             <Autocomplete

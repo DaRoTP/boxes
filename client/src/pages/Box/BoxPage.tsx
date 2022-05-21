@@ -14,6 +14,8 @@ import {
   Select,
   MenuItem,
   Grid,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -22,15 +24,14 @@ import moment from "moment";
 import { BoxType, BoxHistoryEntryType, ActivityType, LocationType } from "types";
 import { useForm } from "react-hook-form";
 
-
 interface BoxPageProps {
-    boxId: string;
-    boxDetails: Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity">>;
-    boxHistory: BoxHistoryEntryType[];
-    submitTransfer: (val: any) => void;
-    locations: LocationType[];
-    activities: ActivityType[];
-    searchLocations: (e: any) => void;
+  boxId: string;
+  boxDetails: Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity">>;
+  boxHistory: BoxHistoryEntryType[];
+  submitTransfer: (val: any) => void;
+  locations: LocationType[];
+  activities: ActivityType[];
+  searchLocations: (e: any) => void;
 }
 
 const BoxPage: React.FC<BoxPageProps> = ({
@@ -148,17 +149,21 @@ const BoxPage: React.FC<BoxPageProps> = ({
               />
             </Grid>
             <Grid item xs={6}>
-              <Select
-                {...register("activity", { required: "field is required" })}
-                error={!!errors.activity?.message}
-                inputProps={{ "aria-label": "Without label" }}
-                fullWidth>
-                {activities?.map((activity) => (
-                  <MenuItem key={activity._id} value={activity._id}>
-                    {`${activity.code} - ${activity.name}`}
-                  </MenuItem>
-                ))}
-              </Select>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Activity</InputLabel>
+                <Select
+                  {...register("activity", { required: "field is required" })}
+                  error={!!errors.activity?.message}
+                  labelId="demo-simple-select-label"
+                  label="Activity"
+                  fullWidth>
+                  {activities?.map((activity) => (
+                    <MenuItem key={activity._id} value={activity._id}>
+                      {`${activity.code} - ${activity.name}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <Button
@@ -180,9 +185,9 @@ const BoxPage: React.FC<BoxPageProps> = ({
               History
             </Typography>
             <Divider style={{ margin: "1rem 0" }} />
-            <Grid container spacing={2}>
+            <Stack style={{ overflowY: "scroll", maxHeight: "30rem" }} spacing={2}>
               {boxHistory?.map((historyEntry) => (
-                <>
+                <Grid container>
                   <Grid item xs={4}>
                     <Chip label={historyEntry?.currentLocation?.identifier} />
                   </Grid>
@@ -194,9 +199,9 @@ const BoxPage: React.FC<BoxPageProps> = ({
                       {moment(historyEntry.timeStamp).format("MMMM Do YYYY, h:mm:ss a")}
                     </Typography>
                   </Grid>
-                </>
+                </Grid>
               ))}
-            </Grid>
+            </Stack>
           </CardContent>
         </Card>
       </Stack>

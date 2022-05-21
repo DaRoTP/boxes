@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GQLApiCall from "service/utils/GQLApiCall";
+import GQLApiCall from "utils/GQLApiCall";
 import Boxes from "./Boxes";
 
 const BoxesGQL = () => {

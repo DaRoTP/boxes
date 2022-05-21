@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as boxService from "service/rest/box.service";
+import RESTApiCall from "utils/RESTApiCall";
 import Boxes from "./Boxes";
 
 const BoxesGQL = () => {
@@ -7,7 +7,15 @@ const BoxesGQL = () => {
   const [totalItemsCount, setTotalItemsCount] = useState<number>(0);
 
   const fetchBoxes = async (page: number, perPage: number) => {
-    const { data } = await boxService.getBoxes({ page, perPage });
+    const { data } = await RESTApiCall({
+      url: "/box",
+      method: "GET",
+      token: true,
+      params: {
+        page,
+        perPage,
+      },
+    });
     if (data) {
       const { totalItems, boxes } = data;
       setTableData(boxes);

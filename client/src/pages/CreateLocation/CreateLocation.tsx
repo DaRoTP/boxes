@@ -26,7 +26,7 @@ const CreateLocation: React.FC<CreateLocationProps> = ({ submitNewLocation }) =>
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
-      <Typography sx={{ marginBottom: "2rem" }} gutterBottom variant="h5">
+      <Typography sx={{ marginBottom: "2rem" }} gutterBottom fontWeight="bold" variant="h5">
         Create Warehouse Location
       </Typography>
       <form onSubmit={handleSubmit(submitNewLocation)}>

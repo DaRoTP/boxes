@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
-import GQLApiCall from 'service/utils/GQLApiCall';
+import GQLApiCall from 'utils/GQLApiCall';
 import CreateLocation from './CreateLocation';
 
 const CreateLOcationGQL = () => {

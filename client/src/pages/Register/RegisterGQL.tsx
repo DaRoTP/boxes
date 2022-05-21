@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { UserContext, UserActionType } from "context/UserContext";
-import GQLApiCall from 'service/utils/GQLApiCall';
+import GQLApiCall from 'utils/GQLApiCall';
 import { UseFormSetError } from 'react-hook-form';
 import Register from './Register';
 

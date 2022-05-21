@@ -1,13 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import CreateLocation from "./CreateLocation";
-import * as locationService from "service/rest/location.service";
+import RESTApiCall from "utils/RESTApiCall";
 
-const CreateLOcationGQL = () => {
+const CreateLocationGQL = () => {
   const navigate = useNavigate();
 
   const submitNewLocation = async (values: any) => {
-    const { data } = await locationService.createLocation({ payload: values });
+    const { data } = await RESTApiCall({
+      url: "/location",
+      method: "POST",
+      token: true,
+      payload: values
+    });
     if (data) {
       navigate("/location");
     }
@@ -16,4 +21,4 @@ const CreateLOcationGQL = () => {
   return <CreateLocation submitNewLocation={submitNewLocation} />;
 };
 
-export default CreateLOcationGQL;
+export default CreateLocationGQL;

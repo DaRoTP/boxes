@@ -7,21 +7,6 @@ export interface callAPIParams {
   setLoading?: (state: boolean) => void
 }
 
-function responseHandler(response: AxiosResponse) {
-  return {
-    data: response.data,
-    error: null,
-  };
-}
-
-function errorHandler(error: any) {
-  return {
-    data: null,
-    error: error.response?.data?.length,
-  };
-}
-
-
 async function callAPI({
   params,
   token,

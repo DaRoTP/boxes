@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 import { debounce } from "throttle-debounce";
 import { ActivityType, BoxHistoryEntryType, BoxType } from "types";
 import BoxPage from "./BoxPage";
-import * as boxService from "service/rest/box.service";
-import * as locationService from "service/rest/location.service";
-import * as activityService from "service/rest/activity.service";
+import RESTApiCall from "utils/RESTApiCall";
 
 const BoxGQL = () => {
   const { boxId } = useParams();
@@ -23,14 +21,22 @@ const BoxGQL = () => {
 
   const fetchBoxDetails = async () => {
     if (boxId) {
-      const { data } = await boxService.getBox({ id: boxId });
+      const { data } = await RESTApiCall({
+        url: `/box/${boxId}`,
+        method: "GET",
+        token: true,
+      });
       const { description, destination, origin, activity } = data;
       setBoxDetails({ description, destination, origin, activity });
     }
   };
 
   const fetchAllActivities = async () => {
-    const { data } = await activityService.getAllActivities({});
+    const { data } = await RESTApiCall({
+      url: "/activity",
+      method: "GET",
+      token: true,
+    });
     if (data) {
       setActivities(
         data.activities.map(({ _id, code, name }: any) => ({
@@ -45,7 +51,11 @@ const BoxGQL = () => {
 
   const fetchBoxHistory = async () => {
     if (boxId) {
-      const { data: historyData } = await boxService.getBoxHistory({ id: boxId });
+      const { data: historyData } = await RESTApiCall({
+        url: `/box/${boxId}/history`,
+        method: "GET",
+        token: true,
+      });
       setBoxHistory(historyData);
     }
   };
@@ -57,10 +67,14 @@ const BoxGQL = () => {
   }, []);
 
   const submitTransfer = async (values: any) => {
-    await boxService.transferOrder({
-      id: boxId!,
-      targetLocationId: values.location,
-      activityId: values.activity,
+    await await RESTApiCall({
+      url: `/box/${boxId}/transfer`,
+      method: "PATCH",
+      token: true,
+      payload: {
+        targetLocationId: values.location,
+        activityId: values.activity,
+      },
     });
     await fetchBoxHistory();
     await fetchBoxDetails();
@@ -70,10 +84,15 @@ const BoxGQL = () => {
     if (!e.target.value) {
       return;
     }
-    const { data } = await locationService.getLocations({
-      query: e.target.value,
-      page: 0,
-      perPage: 6,
+    const { data } = await RESTApiCall({
+      url: "/location",
+      method: "GET",
+      token: true,
+      params: {
+        query: e.target.value,
+        page: 0,
+        perPage: 6,
+      },
     });
     if (data) {
       const { locations } = data;

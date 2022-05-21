@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import GQLApiCall from "service/utils/GQLApiCall";
+import GQLApiCall from "utils/GQLApiCall";
 import { debounce } from "throttle-debounce";
 import { ActivityType, BoxHistoryEntryType, BoxType } from "types";
 import BoxPage from "./BoxPage";

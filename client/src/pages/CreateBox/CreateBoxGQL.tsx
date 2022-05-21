@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GQLApiCall from "service/utils/GQLApiCall";
+import GQLApiCall from "utils/GQLApiCall";
 import { debounce } from "throttle-debounce";
 import { ActivityType, LocationType } from "types";
 import CreateBox from "./CreateBox";

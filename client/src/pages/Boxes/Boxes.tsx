@@ -73,10 +73,12 @@ const Boxes: React.FC<BoxesProps> = ({ tableData, totalItemsCount, fetchBoxes })
         justifyContent="space-between"
         alignItems="center"
         spacing={2}>
-        <Typography fontWeight="bold" variant="h5">
+        <div style={{ display: 'flex', placeItems: 'center', gap: '0.2rem' }}>
           <InventoryIcon />
-          Boxes
-        </Typography>
+          <Typography fontWeight="bold" variant="h5">
+            Boxes
+          </Typography>
+        </div>
         <Button onClick={() => navigate("/box/create")} variant="contained" size="medium">
           Create Box
         </Button>
