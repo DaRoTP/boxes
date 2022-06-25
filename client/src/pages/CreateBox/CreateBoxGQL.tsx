@@ -1,32 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import GQLApiCall from "utils/GQLApiCall";
 import { debounce } from "throttle-debounce";
-import { ActivityType, LocationType } from "types";
+import { ActivityType, LocationType, SizeType } from "types";
 import CreateBox from "./CreateBox";
 
 interface ActivityOptionType extends ActivityType {
+  label: string;
+}
+interface SizeOptionType extends SizeType {
   label: string;
 }
 
 const CreateBoxGQL = () => {
   const [locations, setLocations] = useState([]);
   const [activities, setActivities] = useState<ActivityOptionType[]>([]);
+  const [sizes, setSizes] = useState<SizeOptionType[]>([]);
 
   const navigate = useNavigate();
 
-  const fetchAllActivities = async () => {
+  useEffect(() => {
+    fetchAllActivities();
+    return () => {};
+  }, []);
 
+  const fetchAllActivities = async () => {
     const { data } = await GQLApiCall({
+      token: true,
       query: {
         query: `query {
-              activities { _id, code, name }
+              activities { _id, code, name },
+              sizes { _id, name, code }
             }`,
       },
     });
-    if (data.activities) {
+    const { activities, sizes } = data;
+    if (activities) {
       setActivities(
-        data.activities.map(({ _id, code, name }: any) => ({
+        activities.map(({ _id, code, name }: any) => ({
+          _id,
+          code,
+          name,
+          label: `${code} - ${name}`,
+        }))
+      );
+    }
+    if (sizes) {
+      setSizes(
+        sizes.map(({ _id, code, name }: any) => ({
           _id,
           code,
           name,
@@ -41,6 +62,7 @@ const CreateBoxGQL = () => {
       return;
     }
     const { data } = await GQLApiCall({
+      token: true,
       query: {
         query: `query SEARCH_LOCATION($query: String!){
               locations(query: $query) { identifier }
@@ -60,6 +82,7 @@ const CreateBoxGQL = () => {
   const submitCreateNewBox = async (val: any) => {
     const { activity, description, origin, destination } = val;
     const { data } = await GQLApiCall({
+      token: true,
       query: {
         query: `mutation CREATE_BOX($description: String!, $activityId: ID!, $originId: ID!, $destinationId: ID!){
               createBox(box: {
@@ -87,7 +110,7 @@ const CreateBoxGQL = () => {
 
   return (
     <CreateBox
-      fetchAllActivities={fetchAllActivities}
+      sizes={sizes}
       locations={locations}
       activities={activities}
       submitCreateNewBox={submitCreateNewBox}

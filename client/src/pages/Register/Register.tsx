@@ -28,7 +28,7 @@ const Register: React.FC<RegisterProps> = ({ registerSubmit }) => {
  
 
   return (
-    <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
+    <Box sx={{ maxWidth: "400px", minWidth: "300px", margin: "0 auto" }}>
       <form onSubmit={handleSubmit((vals) => registerSubmit(vals, setError))}>
         <Stack spacing={2}>
           <TextField

@@ -33,7 +33,6 @@ module.exports = {
     transferBox: async (_, args) => {
         const { id, targetLocationId, activityId } = args;
         const data = await boxServiceMongo.transferBox(id, targetLocationId, activityId );
-        console.log(data)
         return data;
     },
     createBox: async (boxData) => {

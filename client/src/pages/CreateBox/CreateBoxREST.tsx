@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "throttle-debounce";
-import { ActivityType, LocationType } from "types";
+import { ActivityType, LocationType, SizeType } from "types";
 import CreateBox from "./CreateBox";
 import RESTApiCall from "utils/RESTApiCall";
 
 interface ActivityOptionType extends ActivityType {
   label: string;
 }
+interface SizeOptionType extends SizeType {
+  label: string;
+}
 
 const CreateBoxGQL = () => {
   const [locations, setLocations] = useState([]);
   const [activities, setActivities] = useState<ActivityOptionType[]>([]);
+  const [sizes, setSizes] = useState<SizeOptionType[]>([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchAllActivities();
+    fetchAllSizes();
+    return () => {};
+  }, []);
 
   const fetchAllActivities = async () => {
     const { data } = await RESTApiCall({
@@ -24,6 +34,24 @@ const CreateBoxGQL = () => {
     if (data) {
       setActivities(
         data.activities.map(({ _id, code, name }: any) => ({
+          _id,
+          code,
+          name,
+          label: `${code} - ${name}`,
+        }))
+      );
+    }
+  };
+
+  const fetchAllSizes = async () => {
+    const { data } = await RESTApiCall({
+      url: "/size",
+      method: "GET",
+      token: true,
+    });
+    if (data) {
+      setSizes(
+        data.sizes.map(({ _id, code, name }: any) => ({
           _id,
           code,
           name,
@@ -55,12 +83,12 @@ const CreateBoxGQL = () => {
   });
 
   const submitCreateNewBox = async (val: any) => {
-    const { activity, description, origin, destination } = val;
+    const { activity, description, origin, destination, size } = val;
     const { data } = await RESTApiCall({
       url: "/box",
       method: "POST",
       token: true,
-      payload: { activityId: activity, description, originId: origin, destinationId: destination },
+      payload: { activityId: activity, description, originId: origin, destinationId: destination, sizeCode: size },
     });
     if (data) {
       navigate("/");
@@ -69,9 +97,9 @@ const CreateBoxGQL = () => {
 
   return (
     <CreateBox
-      fetchAllActivities={fetchAllActivities}
       locations={locations}
       activities={activities}
+      sizes={sizes}
       submitCreateNewBox={submitCreateNewBox}
       searchLocations={searchLocations}
     />

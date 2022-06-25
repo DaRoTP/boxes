@@ -28,6 +28,15 @@ module.exports = {
       next(error);
     }
   },
+  getContactInfo: async (req, res, next) => {
+    try {
+      const { locationId } = req.params;
+      const contactInfo = await locationServiceMongo.getLocationContactInfo(locationId);
+      return res.json(contactInfo);
+    } catch (error) {
+      next(error);
+    }
+  },
   create: async (req, res, next) => {
     try {
       const location = await locationServiceMongo.createNewLocation(req.body);

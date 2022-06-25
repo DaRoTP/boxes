@@ -9,15 +9,19 @@ const BoxesGQL = () => {
   const fetchBoxes = async (page: number, perPage: number) => {
     const { data, errors } = await GQLApiCall({
       query: {
-        query: `query {
-              boxes_totalItems,
-              boxes {
-                _id,
-                activity { code, name },
-                origin { identifier, country, city },
-                destination { identifier, country, city },
-              }
-            }`,
+        query: `query GET_BOXES($page: Int, $perPage: Int) {
+            boxes_totalItems,
+            boxes(page: $page, perPage: $perPage) {
+              _id,
+              activity { code, name },
+              origin { identifier, country, city },
+              destination { identifier, country, city },
+            }
+        }`,
+        variables: {
+          perPage,
+          page
+        }
       },
     });
     if (data) {

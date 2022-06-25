@@ -30,6 +30,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-gql": "set REACT_APP_API_TYPE=GRAPHQL && react-scripts build && cp -R build/* ../server/public",
+    "build-rest": "set REACT_APP_API_TYPE=REST && react-scripts build && cp -R build/* ../server/public",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -1,16 +1,25 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import GQLApiCall from 'utils/GQLApiCall';
-import CreateLocation from './CreateLocation';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import GQLApiCall from "utils/GQLApiCall";
+import CreateLocation from "./CreateLocation";
 
 const CreateLOcationGQL = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-  
-    const submitNewLocation = async (values: any) => {
-        const { data } = await GQLApiCall({
-          query: {
-            query: `mutation CREATE_LOCATION($identifier: String!, $country: String!, $city: String!, $street: String!, $number: Int!, $postcode: String!){
+  const submitNewLocation = async (values: any) => {
+    const { data } = await GQLApiCall({
+      query: {
+        query: `mutation CREATE_LOCATION(
+                $identifier: String!,
+                $country: String!,
+                $city: String!,
+                $street: String!,
+                $number: Int!,
+                $postcode: String!
+                $email: String!
+                $phone1: String!
+                $phone2: String!
+              ){
               createLocation(location: { 
                 identifier: $identifier,
                 country: $country,
@@ -18,21 +27,22 @@ const CreateLOcationGQL = () => {
                 street: $street,
                 number: $number,
                 postcode: $postcode,
+                email: $email,
+                phone1: $phone1,
+                phone2: $phone2,
               }) { 
                 _id
               }
             }`,
-            variables: { ...values, number: parseInt(values.number) },
-          },
-        });
-        if(data.createLocation) {
-          navigate("/location");
-        }
-      };
+        variables: { ...values, number: parseInt(values.number) },
+      },
+    });
+    if (data.createLocation) {
+      navigate("/location");
+    }
+  };
 
-  return (
-    <CreateLocation submitNewLocation={submitNewLocation} />
-  )
-}
+  return <CreateLocation submitNewLocation={submitNewLocation} />;
+};
 
-export default CreateLOcationGQL
+export default CreateLOcationGQL;

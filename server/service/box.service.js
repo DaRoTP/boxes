@@ -7,7 +7,7 @@ module.exports = ({ boxRepository, locationRepository, activityRepository }) => 
             return await boxRepository.getById(id);
         },
         createNewOrder: async (orderData) => {
-            const { description, activityId, originId, destinationId } = orderData;
+            const { description, activityId, originId, destinationId, sizeCode } = orderData;
 
             const origin = await locationRepository.getById(originId);
             const destination = await locationRepository.getById(destinationId);
@@ -16,14 +16,23 @@ module.exports = ({ boxRepository, locationRepository, activityRepository }) => 
 
             const locationHistoryData = { currentLocation: origin, timeStamp: new Date(), activity } 
 
-            const newBox = await boxRepository.create({ description, origin, destination, activity, history: [locationHistoryData] });
+            const newBox = await boxRepository.create({
+                size: sizeCode,
+                description,
+                origin,
+                currentLocation: origin,
+                destination,
+                activity,
+                history: [locationHistoryData]
+            });
 
             return { 
                 _id: newBox._id,
                 description: newBox.description,
                 origin: newBox.origin,
                 destination: newBox.destination,
-                activity: newBox.activity 
+                activity: newBox.activity,
+                currentLocation: newBox.currentLocation,
             }
         },
         createNewOrders: async (orderData) => {
@@ -34,7 +43,7 @@ module.exports = ({ boxRepository, locationRepository, activityRepository }) => 
             const newOrders = [];
             
             for(let orderIndex in orderData) {
-                const { description, activityId, originId, destinationId } = orderData[orderIndex];
+                const { description, activityId, originId, destinationId, sizeCode } = orderData[orderIndex];
 
                 const origin = await locationRepository.getById(originId);
                 const destination = await locationRepository.getById(destinationId);
@@ -42,12 +51,20 @@ module.exports = ({ boxRepository, locationRepository, activityRepository }) => 
 
                 const locationHistoryData = { currentLocation: origin, timeStamp: new Date(), activity } 
 
-                newOrders.push({ description, activity, origin, destination, history: [locationHistoryData] })
+                newOrders.push({
+                    size: sizeCode,
+                    description,
+                    activity,
+                    currentLocation: origin,
+                    origin,
+                    destination,
+                    history: [locationHistoryData]
+                })
             }
 
             const savedOrders = await boxRepository.createMany(newOrders);
 
-            return savedOrders.map(({ _id, description, origin, destination, activity }) => ({ _id, description, origin, destination, activity }))
+            return savedOrders.map(({ _id, description, origin, currentLocation, destination, activity }) => ({ _id, description, origin, currentLocation, destination, activity }))
 
         },
         updateOrder: async (id, orderData) =>{
@@ -79,10 +96,11 @@ module.exports = ({ boxRepository, locationRepository, activityRepository }) => 
             const locationHistoryData = { currentLocation: targetLocation, timeStamp: new Date(), activity} 
 
             boxHistory.history.push(locationHistoryData);
+            box.currentLocation = targetLocation;
             box.activity = activity;
 
             boxRepository.save(boxHistory);
-            boxRepository.save();
+            boxRepository.save(box);
             return box;
         },
         getAllHistoryEntriesOfABox: (id) => {

@@ -5,7 +5,11 @@ const paginate = require("../../utils/paginate");
 const locationServiceMongo = locationService({ locationRepository });
 
 module.exports = {
-    list: async (_, args) => {
+    list: async (_, args, context) => {
+        // if(!context.isAuth) {
+        //     throw new Error("Unauthorized")
+        // }
+
         const { query, page, perPage } = args;
         const locations = await locationServiceMongo.getAllLocations({ query });
         if (page !== undefined && perPage !== undefined) {
@@ -14,12 +18,15 @@ module.exports = {
         }
         return locations;
     },
+    contactInfo: async (locationId) => {
+        const contactInfo = await locationServiceMongo.getLocationContactInfo(locationId);
+        return contactInfo;
+    },
     locationCount: async () => {
         const locations = await locationServiceMongo.getAllLocations({});
         return locations.length;
     },
     getById: async (locationId) => {
-        console.log(`find ${locationId}`)
         return await locationServiceMongo.getLocationById(locationId);
     },
     createLocation: async (locationData) => {

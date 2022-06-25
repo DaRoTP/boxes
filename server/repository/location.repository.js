@@ -5,15 +5,26 @@ const save = async (location) => {
 }
 
 const list = async () => {
-    return await Location.find({});
+    const fields = ["_id", "identifier", "country", "city", "street", "number", "postcode"];
+    return await Location.find({}, fields.join(" "));
 }
 
 const getById = async (id) => {
+    const fields = ["_id", "identifier", "country", "city", "street", "number", "postcode"];
     try {
-        return await Location.findOne({ identifier: id });
+        return await Location.findOne({ identifier: id }, fields.join(" "));
     } catch (error) {
         throw new Error(`could not find location with id: ${id}`)        
     }
+}
+
+const getContactInfo = async (id) => {
+    const fields = ["email", "phone1", "phone2"];
+    try {
+        return await Location.findOne({ identifier: id }, fields.join(" "));
+    } catch (error) {
+        throw new Error(`could not find location with id: ${id}`)        
+    }  
 }
 
 const deleteById = async (id) => {
@@ -41,5 +52,6 @@ module.exports = {
     create,
     getById,
     deleteById,
+    getContactInfo,
     updateLocationById,
 };

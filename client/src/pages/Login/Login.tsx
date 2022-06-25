@@ -21,7 +21,7 @@ const Login: React.FC<LoginProps> = ({ loginSubmit }) => {
   });
 
   return (
-    <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
+    <Box sx={{ maxWidth: "400px", minWidth: "300px", margin: "0 auto" }}>
       <form onSubmit={handleSubmit((val) => loginSubmit(val, setError))}>
         <Stack spacing={2}>
           <TextField

@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const { isAuth, isAuthThrow } = require('../../middleware/isAuth.middleware');
+const { isAuthThrow } = require('../../middleware/isAuth.middleware');
 
 const BoxController = require('../controller/box.controller');
 
 router
   .route("/")
   .get(BoxController.list)
-  .post(isAuth, isAuthThrow, BoxController.createOrder)
+  .post(isAuthThrow, BoxController.createOrder)
 
 router
   .route("/:boxId")

@@ -31,7 +31,15 @@ const locationSchema = new mongoose.Schema({
     required: [true, "postcode is requied"],
     maxlength: [8, "must not be longer than 8 characters"],
   },
-
+  email: {
+    type: String,
+  },
+  phone1: {
+    type: String
+  },
+  phone2: {
+    type: String
+  }
 
 });
 

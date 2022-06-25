@@ -20,14 +20,20 @@ import {
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import moment from "moment";
+import HistoryEntry from "components/HistoryEntry";
 
-import { BoxType, BoxHistoryEntryType, ActivityType, LocationType } from "types";
+import { BoxType, HistoryEntryWithContactInfo, ActivityType, LocationType } from "types";
 import { useForm } from "react-hook-form";
 
 interface BoxPageProps {
   boxId: string;
-  boxDetails: Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity">>;
-  boxHistory: BoxHistoryEntryType[];
+  boxDetails: Partial<
+    Pick<
+      BoxType,
+      "description" | "destination" | "origin" | "activity" | "currentLocation" | "size"
+    >
+  >;
+  boxHistory: HistoryEntryWithContactInfo[];
   submitTransfer: (val: any) => void;
   locations: LocationType[];
   activities: ActivityType[];
@@ -69,6 +75,35 @@ const BoxPage: React.FC<BoxPageProps> = ({
         </Typography>
       </Stack>
       <Stack spacing={2} style={{ marginTop: "1rem" }}>
+        <Paper style={{ padding: "1rem" }}>
+          <Stack direction="row" justifyContent="space-between">
+            <Stack direction="column" spacing={1} justifyContent="center">
+              <Typography sx={{ fontSize: 10 }} gutterBottom>
+                Current Location
+              </Typography>
+              <Chip label={boxDetails?.currentLocation?.identifier} />
+              <Typography sx={{ fontSize: 16, fontWeight: "bold" }} color="text.primary">
+                {boxDetails?.currentLocation?.country} | {boxDetails?.currentLocation?.city}
+              </Typography>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                {boxDetails?.currentLocation?.street} / {boxDetails?.currentLocation?.number} -{" "}
+                {boxDetails?.currentLocation?.postcode}
+              </Typography>
+            </Stack>
+            <Stack direction="column" spacing={1} justifyContent="center">
+              <Typography sx={{ fontSize: 10 }} gutterBottom>
+                Box size & weight
+              </Typography>
+              <Chip label={`${boxDetails?.size?.code} | ${boxDetails?.size?.name}`} />
+              <Typography align="center" sx={{ fontSize: 12 }}>
+                {`${boxDetails?.size?.weight} kg`}
+              </Typography>
+              <Typography sx={{ fontSize: 10 }} color="text.secondary">
+                {`wdith: ${boxDetails?.size?.mesurments.x}, height: ${boxDetails?.size?.mesurments.y}, depth: ${boxDetails?.size?.mesurments.z}`}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Paper>
         <Paper style={{ padding: "1rem" }}>
           <Typography sx={{ fontSize: 14 }} gutterBottom>
             Transfer
@@ -187,19 +222,12 @@ const BoxPage: React.FC<BoxPageProps> = ({
             <Divider style={{ margin: "1rem 0" }} />
             <Stack style={{ overflowY: "scroll", maxHeight: "30rem" }} spacing={2}>
               {boxHistory?.map((historyEntry) => (
-                <Grid container>
-                  <Grid item xs={4}>
-                    <Chip label={historyEntry?.currentLocation?.identifier} />
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Chip color="primary" label={historyEntry?.activity?.code} />
-                  </Grid>
-                  <Grid item xs={5}>
-                    <Typography>
-                      {moment(historyEntry.timeStamp).format("MMMM Do YYYY, h:mm:ss a")}
-                    </Typography>
-                  </Grid>
-                </Grid>
+                <HistoryEntry
+                  locationIdentifier={historyEntry?.currentLocation.identifier}
+                  activityCode={historyEntry?.activity?.code}
+                  timeStamp={moment(historyEntry.timeStamp).format("MMMM Do YYYY, h:mm:ss a")}
+                  contactInfo={historyEntry.contactInfo}
+                />
               ))}
             </Stack>
           </CardContent>

@@ -10,9 +10,9 @@ const list = async () => {
 }
 
 const getById = async (id) => {
-    const fields = ["_id", "description", "origin", "destination", "activity"];
+    const fields = ["_id", "description", "origin", "destination", "activity", "currentLocation", "size"];
     try {
-        return await Box.findOne({ _id: id }, fields.join(" ")).populate("origin destination activity");
+        return await Box.findOne({ _id: id }, fields.join(" ")).populate("origin destination activity currentLocation");
     } catch (error) {
         throw new Error(`could not find box with id: ${id}`)        
     }

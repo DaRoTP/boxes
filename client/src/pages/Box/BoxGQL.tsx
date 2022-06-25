@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GQLApiCall from "utils/GQLApiCall";
 import { debounce } from "throttle-debounce";
-import { ActivityType, BoxHistoryEntryType, BoxType } from "types";
+import { ActivityType, HistoryEntryWithContactInfo, BoxType } from "types";
 import BoxPage from "./BoxPage";
 
 const BoxGQL = () => {
@@ -16,7 +16,7 @@ const BoxGQL = () => {
     origin: undefined,
   });
   const [locations, setLocations] = useState([]);
-  const [boxHistory, setBoxHistory] = useState<BoxHistoryEntryType[]>([]);
+  const [boxHistory, setBoxHistory] = useState<HistoryEntryWithContactInfo[]>([]);
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
   const fetchBoxDetailsGraphql = async () => {
@@ -28,9 +28,11 @@ const BoxGQL = () => {
             _id,
             description, 
             activity { _id, code, name }, 
+            currentLocation { _id, identifier, country, city, street, number, postcode }, 
             origin { _id, identifier, country, city, street, number, postcode }, 
             destination { _id, identifier, country, city, street, number, postcode },
-            history { timeStamp, currentLocation { identifier }, activity { _id, code, name } }
+            size { _id, code, name, weight, mesurments { x, y, z } }
+            history { timeStamp, currentLocation { identifier, email, phone1, phone2 }, activity { _id, code, name } }
           }
         }`,
         variables: { boxId },
@@ -40,7 +42,18 @@ const BoxGQL = () => {
     if (data) {
       const { box, activities } = data;
       const { history, ...restBoxData } = box;
-      setBoxHistory(history);
+      console.log(history);
+      setBoxHistory(() => {
+        const res = history.map(
+          ({ currentLocation: { email, phone1, phone2, ...restLocation }, ...restProps }: any) => ({
+            ...restProps,
+            currentLocation: restLocation,
+            contactInfo: { email, phone1, phone2 },
+          })
+        );
+        console.log(res);
+        return res;
+      });
       setActivities(
         activities.map(({ _id, code, name }: any) => ({
           _id,

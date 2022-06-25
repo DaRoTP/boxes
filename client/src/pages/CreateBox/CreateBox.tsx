@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Autocomplete,
   Box,
@@ -13,13 +13,13 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 
-import { ActivityType, LocationType } from "types";
+import { ActivityType, SizeType, LocationType } from "types";
 
 interface CreateBoxProps {
   locations: LocationType[];
   searchLocations: (e: any) => void;
   activities: ActivityType[];
-  fetchAllActivities: () => void;
+  sizes: SizeType[];
   submitCreateNewBox: (values: any) => void;
 }
 
@@ -27,7 +27,7 @@ const CreateBox: React.FC<CreateBoxProps> = ({
   locations,
   searchLocations,
   activities,
-  fetchAllActivities,
+  sizes,
   submitCreateNewBox,
 }) => {
   const {
@@ -39,16 +39,12 @@ const CreateBox: React.FC<CreateBoxProps> = ({
     mode: "onChange",
     defaultValues: {
       description: "",
+      size: "",
       activity: "",
       origin: "",
       destination: "",
     },
   });
-
-  useEffect(() => {
-    fetchAllActivities();
-    return () => {};
-  }, []);
 
   return (
     <Box sx={{ maxWidth: "50%", minWidth: "300px", margin: "0 auto" }}>
@@ -69,7 +65,7 @@ const CreateBox: React.FC<CreateBoxProps> = ({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Activity</InputLabel>
               <Select
@@ -82,6 +78,24 @@ const CreateBox: React.FC<CreateBoxProps> = ({
                 {activities.map((activity) => (
                   <MenuItem key={activity._id} value={activity._id}>
                     {`${activity.code} - ${activity.name}`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Size</InputLabel>
+              <Select
+                {...register("size", { required: "field is required" })}
+                error={!!errors.activity?.message}
+                labelId="demo-simple-select-label"
+                label="Size"
+                inputProps={{ "aria-label": "Without label" }}
+                fullWidth>
+                {sizes.map((size) => (
+                  <MenuItem key={size._id} value={size.code}>
+                    {`${size.code} - ${size.name}`}
                   </MenuItem>
                 ))}
               </Select>

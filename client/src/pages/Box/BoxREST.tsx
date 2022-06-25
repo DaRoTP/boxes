@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { debounce } from "throttle-debounce";
-import { ActivityType, BoxHistoryEntryType, BoxType } from "types";
+import { ActivityType, HistoryEntryWithContactInfo, BoxType } from "types";
 import BoxPage from "./BoxPage";
 import RESTApiCall from "utils/RESTApiCall";
 
@@ -9,14 +9,14 @@ const BoxGQL = () => {
   const { boxId } = useParams();
 
   const [boxDetails, setBoxDetails] = useState<
-    Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity">>
+    Partial<Pick<BoxType, "description" | "destination" | "origin" | "activity" | "currentLocation" | "size">>
   >({
     description: "",
     destination: undefined,
     origin: undefined,
   });
   const [locations, setLocations] = useState([]);
-  const [boxHistory, setBoxHistory] = useState<BoxHistoryEntryType[]>([]);
+  const [boxHistory, setBoxHistory] = useState<HistoryEntryWithContactInfo[]>([]);
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
   const fetchBoxDetails = async () => {
@@ -26,8 +26,13 @@ const BoxGQL = () => {
         method: "GET",
         token: true,
       });
-      const { description, destination, origin, activity } = data;
-      setBoxDetails({ description, destination, origin, activity });
+      const { description, destination, origin, activity, currentLocation, size } = data;
+      const { data: sizeData } = await RESTApiCall({
+        url: `/size/${size}`,
+        method: "GET",
+        token: true,
+      });
+      setBoxDetails({ description, destination, origin, activity, currentLocation, size: sizeData });
     }
   };
 
@@ -55,6 +60,14 @@ const BoxGQL = () => {
         url: `/box/${boxId}/history`,
         method: "GET",
         token: true,
+      });
+      historyData.forEach(async (entry: HistoryEntryWithContactInfo) => {
+        const { data: locationContactInfo } = await RESTApiCall({
+          url: `/location/${entry.currentLocation.identifier}/contact`,
+          method: "GET",
+          token: true,
+        });
+        entry.contactInfo = locationContactInfo;
       });
       setBoxHistory(historyData);
     }

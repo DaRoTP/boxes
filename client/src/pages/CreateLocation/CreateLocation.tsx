@@ -20,6 +20,9 @@ const CreateLocation: React.FC<CreateLocationProps> = ({ submitNewLocation }) =>
       street: "",
       number: "",
       postcode: "",
+      email: "",
+      phone1: "",
+      phone2: "",
     },
   });
 
@@ -90,6 +93,39 @@ const CreateLocation: React.FC<CreateLocationProps> = ({ submitNewLocation }) =>
               error={!!errors.postcode?.message}
               helperText={errors.postcode?.message}
               label="post code"
+              variant="outlined"
+              type="text"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              {...register("email", { required: "field is required" })}
+              error={!!errors.email?.message}
+              helperText={errors.email?.message}
+              label="email"
+              variant="outlined"
+              type="text"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              {...register("phone1", { required: "field is required" })}
+              error={!!errors.phone1?.message}
+              helperText={errors.phone1?.message}
+              label="phone 1"
+              variant="outlined"
+              type="text"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              {...register("phone2", { required: "field is required" })}
+              error={!!errors.phone2?.message}
+              helperText={errors.phone2?.message}
+              label="phone 2"
               variant="outlined"
               type="text"
               fullWidth
