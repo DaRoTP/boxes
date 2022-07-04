@@ -31,13 +31,7 @@ const updateSize = async (id, sizeData) => {
 
 const create = async (sizeData) => {
     const newSize = new Size(sizeData);
-    const foundsize = await Size.findOne({ code: id });
-    
-    if(newSize.name) foundsize.name = newSize.name;
-    if(newSize.weight) foundsize.weight = newSize.weight;
-    if(newSize.mesurments) foundsize.mesurments = newSize.mesurments;
-
-    return await save(foundsize)
+    return await save(newSize)
 }
 
 

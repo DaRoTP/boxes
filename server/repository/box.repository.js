@@ -5,8 +5,8 @@ const save = async (box) => {
 }
 
 const list = async () => {
-    const fields = ["_id", "description", "origin", "destination", "activity"];
-    return await Box.find({}, fields.join(" ")).populate("origin destination activity");
+    const fields = ["_id", "description", "origin", "destination", "activity", "size", "currentLocation"];
+    return await Box.find({}, fields.join(" ")).populate("origin destination activity currentLocation");
 }
 
 const getById = async (id) => {

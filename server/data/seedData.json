@@ -1,0 +1,129 @@
+{
+  "users": [
+    { "username": "user", "password": "password" },
+    { "username": "user1", "password": "password" },
+    { "username": "user2", "password": "password" },
+    { "username": "user3", "password": "password" },
+    { "username": "user4", "password": "password" },
+    { "username": "user5", "password": "password" }
+  ],
+
+  "sizes": [
+    {
+      "name": "Medium",
+      "code": "M",
+      "weight": 44,
+      "mesurments": { "x": 21, "y": 22, "z": 23 }
+    },
+    {
+      "name": "Small",
+      "code": "SM",
+      "weight": 34,
+      "mesurments": { "x": 11, "y": 12, "z": 13 }
+    },
+    {
+      "name": "Large",
+      "code": "L",
+      "weight": 54,
+      "mesurments": { "x": 31, "y": 32, "z": 33 }
+    }
+  ],
+
+  "locations": [
+    {
+      "identifier": "LT-1-VNO",
+      "country": "Lithuania",
+      "city": "Vilnius",
+      "street": "Architektu",
+      "number": 76,
+      "postcode": "43435",
+      "email": "girteka@mail.lt",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "LT-2-KAUN",
+      "country": "Lithuania",
+      "city": "Kaunas",
+      "street": "Laisves",
+      "number": 34,
+      "postcode": "32344",
+      "email": "kaunVerka@mail.lt",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "PL-1-WAR",
+      "country": "Poland",
+      "city": "Warsaw",
+      "street": "westerplate",
+      "number": 2,
+      "postcode": "32445",
+      "email": "zlotetar@mail.pl",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "PL-2-GDA",
+      "country": "Poland",
+      "city": "Gdansk",
+      "street": "Podwale przedmiejskie",
+      "number": 2,
+      "postcode": "wrw",
+      "email": "trojmiasto@mail.pl",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "DE-1-BE",
+      "country": "Germany",
+      "city": "Berlin",
+      "street": "street",
+      "number": 32,
+      "postcode": "324324",
+      "email": "wusr@mail.de",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "DE-2-COL",
+      "country": "Germany",
+      "city": "Colonge",
+      "street": "cologne street",
+      "number": 323,
+      "postcode": "4234",
+      "email": "cologne@mail.de",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "EST-1-TAL",
+      "country": "Estonia",
+      "city": "Talin",
+      "street": "talin city",
+      "number": 23,
+      "postcode": "432425",
+      "email": "talin@mail.est",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    },
+    {
+      "identifier": "EST-2-SA",
+      "country": "Estonia",
+      "city": "Sakva",
+      "street": "sakvasa",
+      "number": 32,
+      "postcode": "42423",
+      "email": "sakva@mail.est",
+      "phone1": "12345678",
+      "phone2": "87654321"
+    }
+  ],
+  "activities": [
+    { "name": "Transfer", "code": "TRA" },
+    { "name": "Stock Movement", "code": "SM" },
+    { "name": "Inbound", "code": "INB" },
+    { "name": "Outbnound", "code": "OUTB" },
+    { "name": "Request", "code": "REQ" }
+  ]
+}

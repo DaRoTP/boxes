@@ -57,6 +57,7 @@ const BoxInputTypeDef = new GraphQLInputObjectType({
     activityId: { type: new GraphQLNonNull(GraphQLID) },
     originId: { type: GraphQLID },
     destinationId: { type: GraphQLID },
+    sizeCode: { type: GraphQLString },
   }),
 });
 

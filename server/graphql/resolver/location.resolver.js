@@ -27,6 +27,7 @@ module.exports = {
         return locations.length;
     },
     getById: async (locationId) => {
+        console.log(`getting location : ${locationId}`)
         return await locationServiceMongo.getLocationById(locationId);
     },
     createLocation: async (locationData) => {

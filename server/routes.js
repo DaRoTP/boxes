@@ -7,6 +7,7 @@ const activityRoutes = require("./rest/routes/activity.route");
 const sizeRoutes = require("./rest/routes/size.route");
 const boxRoutes = require("./rest/routes/box.route");
 const userRoutes = require("./rest/routes/user.route");
+const seedRoutes = require("./rest/routes/seed.route");
 
 const errorMiddleware = require("./middleware/error.middleware");
 const { isAuth } = require("./middleware/isAuth.middleware");
@@ -42,6 +43,7 @@ module.exports = (app) => {
       .use(`${API_PREFIX}/size`, sizeRoutes)
       .use(`${API_PREFIX}/box`, boxRoutes)
       .use(`${API_PREFIX}/user`, userRoutes)
+      .use(`${API_PREFIX}/seed`, seedRoutes)
       .use(errorMiddleware);
 
     if (ENV.NODE_ENV === "production") {

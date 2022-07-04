@@ -8,7 +8,7 @@ const BoxController = require('../controller/box.controller');
 router
   .route("/")
   .get(BoxController.list)
-  .post(isAuthThrow, BoxController.createOrder)
+  .post(BoxController.createOrder)
 
 router
   .route("/:boxId")

@@ -13,7 +13,7 @@ module.exports = {
         const { page, perPage } = args;
         const boxes = await boxServiceMongo.getAllOrders();
         if (page !== undefined && perPage !== undefined) {
-            const { data } = paginate(boxes, page, perPage);
+            const { data } = paginate(boxes, parseInt(page), parseInt(perPage));
             return data
         }
         return boxes;
@@ -23,6 +23,7 @@ module.exports = {
         return boxes.length;
     },
     getById: async (id) => {
+        console.log(`getting box : ${id}`)
         return await boxServiceMongo.getOrderById(id);
     },
     getBoxHistoryById: async (_, args) => {
